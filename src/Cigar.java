@@ -1,0 +1,4 @@
+
+public enum Cigar {
+	PALL_MALL, DUNHILL, BLENDS, BLUEMASTER, PRINCE;
+}
