@@ -1,3 +1,7 @@
+package edu.chapman.ablaz101.einstein_csp;
+
+import edu.chapman.ablaz101.enums.*;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,6 +13,7 @@ public class HouseVariable {
 	public Set<Cigar> cigar;
 	public Set<Pet> pet;
 	public int houseNo;
+    public HouseAssignment assign;
 	public boolean complete = false;
 	
 	public HouseVariable() {

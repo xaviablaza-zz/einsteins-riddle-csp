@@ -1,3 +1,4 @@
+package edu.chapman.ablaz101.interfaces;
 
 public interface CSProblem {
 	

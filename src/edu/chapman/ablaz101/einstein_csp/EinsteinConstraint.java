@@ -1,8 +1,9 @@
+package edu.chapman.ablaz101.einstein_csp;
+
+import edu.chapman.ablaz101.enums.*;
+import edu.chapman.ablaz101.interfaces.Constraint;
 
 public class EinsteinConstraint implements Constraint {
-	private HouseVariable v;
-	private HouseVariable h1;
-	private HouseVariable h2;
 	private Nationality n;
 	private Color c;
 	private Color c1;
@@ -14,9 +15,6 @@ public class EinsteinConstraint implements Constraint {
 	private int type;
 	
 	public EinsteinConstraint() {
-		v = null;
-		h1 = null;
-		h2 = null;
 		n = null;
 		c = null;
 		c1 = null;
@@ -28,118 +26,100 @@ public class EinsteinConstraint implements Constraint {
 		type = -1;
 	}
 
-	public EinsteinConstraint(HouseVariable v, Nationality n, Color c) {
+	public EinsteinConstraint(Nationality n, Color c) {
 		super();
 		type = 0;
-		this.v = v;
 		this.n = n;
 		this.c = c;
 	}
 
-	public EinsteinConstraint(HouseVariable v, Nationality n, Pet p) {
+	public EinsteinConstraint(Nationality n, Pet p) {
 		super();
 		type = 1;
-		this.v = v;
 		this.n = n;
 		this.p = p;
 	}
 	
-	public EinsteinConstraint(HouseVariable v, Nationality n, Beverage b) {
+	public EinsteinConstraint(Nationality n, Beverage b) {
 		super();
 		type = 2;
-		this.v = v;
 		this.n = n;
 		this.b = b;
 	}
 
-	public EinsteinConstraint(HouseVariable leftHouse, Color leftColor, HouseVariable rightHouse, Color rightColor) {
+	public EinsteinConstraint(Color leftColor, Color rightColor) {
 		super();
 		type = 3;
-		h1 = leftHouse;
 		c1 = leftColor;
-		h2 = rightHouse;
 		c2 = rightColor;
 	}
 
-	public EinsteinConstraint(HouseVariable v, Color c, Beverage b) {
+	public EinsteinConstraint(Color c, Beverage b) {
 		super();
 		type = 4;
-		this.v = v;
 		this.c = c;
 		this.b = b;
 	}
 
-	public EinsteinConstraint(HouseVariable v, Cigar ci, Pet p) {
+	public EinsteinConstraint(Cigar ci, Pet p) {
 		super();
 		type = 5;
-		this.v = v;
 		this.ci = ci;
 		this.p = p;
 	}
 
-	public EinsteinConstraint(HouseVariable v, Color c, Cigar ci) {
+	public EinsteinConstraint(Color c, Cigar ci) {
 		super();
 		type = 6;
-		this.v = v;
 		this.c = c;
 		this.ci = ci;
 	}
 
-	public EinsteinConstraint(HouseVariable v, int houseNo, Beverage b) {
+	public EinsteinConstraint(int houseNo, Beverage b) {
 		super();
 		type = 7;
-		this.v = v;
 		this.houseNo = houseNo;
 		this.b = b;
 	}
 
-	public EinsteinConstraint(HouseVariable v, int houseNo, Nationality n) {
+	public EinsteinConstraint(int houseNo, Nationality n) {
 		super();
 		type = 8;
-		this.v = v;
 		this.houseNo = houseNo;
 		this.n = n;
 	}
 
-	public EinsteinConstraint(HouseVariable cigarHouse, HouseVariable petHouse, Cigar ci, Pet p) {
+	public EinsteinConstraint(boolean nextTo, Cigar ci, Pet p) {
 		super();
 		type = 9;
-		h1 = cigarHouse;
-		h2 = petHouse;
 		this.ci = ci;
 		this.p = p;
 	}
 
-	public EinsteinConstraint(HouseVariable v, Cigar ci, Beverage b) {
+	public EinsteinConstraint(Cigar ci, Beverage b) {
 		super();
 		type = 10;
-		this.v = v;
 		this.ci = ci;
 		this.b = b;
 	}
 
-	public EinsteinConstraint(HouseVariable v, Nationality n, Cigar ci) {
+	public EinsteinConstraint(Nationality n, Cigar ci) {
 		super();
 		type = 11;
-		this.v = v;
 		this.n = n;
 		this.ci = ci;
 	}
 
-	public EinsteinConstraint(HouseVariable nationalityHouse, HouseVariable colorHouse, Nationality n, Color c) {
+	public EinsteinConstraint(boolean nextTo, Nationality n, Color c) {
 		super();
 		type = 12;
-		h1 = nationalityHouse;
-		h2 = colorHouse;
 		this.n = n;
 		this.c = c;
 	}
 
-	public EinsteinConstraint(HouseVariable cigarHouse, HouseVariable beverageHouse, Cigar ci, Beverage b) {
+	public EinsteinConstraint(boolean nextTo, Cigar ci, Beverage b) {
 		super();
 		type = 13;
-		h1 = cigarHouse;
-		h2 = beverageHouse;
 		this.ci = ci;
 		this.b = b;
 	}
@@ -150,7 +130,7 @@ public class EinsteinConstraint implements Constraint {
 	}
 
 	@Override
-	public boolean isSatisfied() {
+	public boolean isSatisfied(HouseVariable v, HouseVariable h1, HouseVariable h2) {
 		switch (type) {
 			case 0:
 				if (v.nationality.contains(n) && v.color.contains(c)) return true;

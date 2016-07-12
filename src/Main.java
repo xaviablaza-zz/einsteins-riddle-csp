@@ -1,3 +1,4 @@
+import edu.chapman.ablaz101.einstein_csp.EinsteinsRiddle;
 
 public class Main {
 
