@@ -7,6 +7,5 @@ public interface BackTrack {
     boolean completeCheck();
     void selectUnassignedVar();
     void selectDomain();
-    void consistencyCheck();
 
 }

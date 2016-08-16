@@ -15,8 +15,11 @@ public class EinsteinBackTrack implements BackTrack {
     private final EinsteinsRiddle riddle;
     HouseAssignment assign;
     public final EinsteinConstraint[] highConstraints;
-    public final EinsteinConstraint[] medConstraints;
-    public final EinsteinConstraint[] lowConstraints;
+    public final EinsteinConstraint[] natConstraints;
+    public final EinsteinConstraint[] bevConstraints;
+    public final EinsteinConstraint[] colConstraints;
+    public final EinsteinConstraint[] cigConstraints;
+    public final EinsteinConstraint[] petConstraints;
 
     public EinsteinBackTrack(EinsteinsRiddle riddle) {
         vars = new HouseVariable[5];
@@ -31,22 +34,44 @@ public class EinsteinBackTrack implements BackTrack {
                 new EinsteinConstraint(0, Color.WHITE),
                 new EinsteinConstraint(4, Color.GREEN)
         };
-        medConstraints = new EinsteinConstraint[] {
-                new EinsteinConstraint(true, Cigar.BLENDS, Pet.CATS),
-                new EinsteinConstraint(true, Cigar.DUNHILL, Pet.HORSES),
-                new EinsteinConstraint(true, Nationality.NORWEGIAN, Color.BLUE)
-        };
-        lowConstraints = new EinsteinConstraint[] {
+        natConstraints = new EinsteinConstraint[] {
+                new EinsteinConstraint(Nationality.GERMAN, Cigar.PRINCE),
                 new EinsteinConstraint(Nationality.BRIT, Color.RED),
                 new EinsteinConstraint(Nationality.SWEDE, Pet.DOGS),
                 new EinsteinConstraint(Nationality.DANE, Beverage.TEA),
+                new EinsteinConstraint(true, Nationality.NORWEGIAN, Color.BLUE),
+                new EinsteinConstraint(0, Nationality.NORWEGIAN)
+        };
+        bevConstraints = new EinsteinConstraint[] {
+                new EinsteinConstraint(2, Beverage.MILK),
+                new EinsteinConstraint(Cigar.BLENDS, Beverage.WATER),
+                new EinsteinConstraint(Cigar.BLUEMASTER, Beverage.BEER),
+                new EinsteinConstraint(Color.GREEN, Beverage.COFFEE),
+                new EinsteinConstraint(Nationality.DANE, Beverage.TEA)
+        };
+        colConstraints = new EinsteinConstraint[] {
+                new EinsteinConstraint(Color.YELLOW, Cigar.DUNHILL),
                 new EinsteinConstraint(Color.GREEN, Color.WHITE),
                 new EinsteinConstraint(Color.GREEN, Beverage.COFFEE),
+                new EinsteinConstraint(Nationality.BRIT, Color.RED),
+                new EinsteinConstraint(0, Color.WHITE),
+                new EinsteinConstraint(4, Color.GREEN),
+                new EinsteinConstraint(true, Nationality.NORWEGIAN, Color.BLUE)
+        };
+        cigConstraints = new EinsteinConstraint[] {
                 new EinsteinConstraint(Cigar.PALL_MALL, Pet.BIRDS),
                 new EinsteinConstraint(Color.YELLOW, Cigar.DUNHILL),
                 new EinsteinConstraint(Cigar.BLUEMASTER, Beverage.BEER),
                 new EinsteinConstraint(Nationality.GERMAN, Cigar.PRINCE),
-                new EinsteinConstraint(Cigar.BLENDS, Beverage.WATER)
+                new EinsteinConstraint(Cigar.BLENDS, Beverage.WATER),
+                new EinsteinConstraint(true, Cigar.BLENDS, Pet.CATS),
+                new EinsteinConstraint(true, Cigar.DUNHILL, Pet.HORSES),
+        };
+        petConstraints = new EinsteinConstraint[] {
+                new EinsteinConstraint(true, Cigar.BLENDS, Pet.CATS),
+                new EinsteinConstraint(true, Cigar.DUNHILL, Pet.HORSES),
+                new EinsteinConstraint(Nationality.SWEDE, Pet.DOGS),
+                new EinsteinConstraint(Cigar.PALL_MALL, Pet.BIRDS),
         };
     }
 
@@ -61,9 +86,55 @@ public class EinsteinBackTrack implements BackTrack {
         selectDomain();
 
         // Check if variables are consistent
-        consistencyCheck();
+        boolean satisfied = true;
+        // Check the constraints that only apply to the part of the domain that is being checked
+        for (EinsteinConstraint c : natConstraints) {
+            if (!c.isSatisfied(assign, assign.nationality))
+                satisfied = false;
+        }
+        if (satisfied)
+            curr.assign.nationality = assign.nationality;
+        else
+            curr.assign.nationality = null;
 
+        for (EinsteinConstraint c : bevConstraints) {
+            if (!c.isSatisfied(assign, assign.beverage))
+                satisfied = false;
+        }
+        if (satisfied)
+            curr.assign.beverage = assign.beverage;
+        else
+            curr.assign.beverage = null;
 
+        for (EinsteinConstraint c : colConstraints) {
+            if (!c.isSatisfied(assign, assign.color))
+                satisfied = false;
+        }
+        if (satisfied)
+            curr.assign.color = assign.color;
+        else
+            curr.assign.color = null;
+
+        for (EinsteinConstraint c : cigConstraints) {
+            if (!c.isSatisfied(assign, assign.cigar))
+                satisfied = false;
+        }
+        if (satisfied)
+            curr.assign.cigar = assign.cigar;
+        else
+            curr.assign.cigar = null;
+
+        for (EinsteinConstraint c : petConstraints) {
+            if (!c.isSatisfied(assign, assign.pet))
+                satisfied = false;
+        }
+        if (satisfied)
+            curr.assign.pet = assign.pet;
+        else
+            curr.assign.pet = null;
+
+        boolean result = CSP_BACKTRACKING();
+        if (result) return result;
 
         return false;
     }
@@ -135,18 +206,5 @@ public class EinsteinBackTrack implements BackTrack {
         // Apply the ordering onto the variable for the consistency check
         curr.assign = assign;
 
-    }
-
-    @Override
-    public void consistencyCheck() {
-        for (EinsteinConstraint c : highConstraints) {
-            c.isSatisfied(assign);
-        }
-        for (EinsteinConstraint c : medConstraints) {
-            c.isSatisfied(assign);
-        }
-        for (EinsteinConstraint c : lowConstraints) {
-            c.isSatisfied(assign);
-        }
     }
 }

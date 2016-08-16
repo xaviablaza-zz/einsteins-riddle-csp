@@ -1,12 +1,10 @@
 package edu.chapman.ablaz101.einstein_csp;
 
 import edu.chapman.ablaz101.enums.*;
-import edu.chapman.ablaz101.interfaces.Constraint;
 
-import java.util.Queue;
 import java.util.Random;
 
-public class EinsteinConstraint implements Constraint {
+public class EinsteinConstraint {
 	public Nationality n;
 	private Color c;
 	private Color c1;
@@ -160,42 +158,17 @@ public class EinsteinConstraint implements Constraint {
 		else return false;
 	}
 
-	@Override
-	public boolean isSatisfied(HouseAssignment assign) {
-		// something will always be assigned to the assign so it can't be null
+	public boolean isSatisfied(HouseAssignment assign, Nationality nationality) {
 		switch (type) {
 			case 0:
 				// xnor
-				if (assign.nationality.equals(n) == assign.color.equals(c)) return true;
+				if (nationality.equals(n) == assign.color.equals(c)) return true;
 			case 1:
-				if (assign.nationality.equals(n) == assign.pet.equals(p)) return true;
+				if (nationality.equals(n) == assign.pet.equals(p)) return true;
 			case 2:
 				if (assign.nationality.equals(n) == assign.beverage.equals(b)) return true;
-			case 3:
-				for (int i=0; i<EinsteinBackTrack.vars.length-1; ++i) {
-					// xor ^
-					if (EinsteinBackTrack.vars[i].color.equals(c1)
-							&& !EinsteinBackTrack.vars[i].color.equals(c2)
-							&& EinsteinBackTrack.vars[i+1].color.equals(c2)
-							&& !EinsteinBackTrack.vars[i+1].color.equals(c1)) return true;
-				}
-			case 4:
-				if (assign.color.equals(c) == assign.beverage.equals(b)) return true;
-			case 5:
-				if (assign.cigar.equals(ci) == assign.pet.equals(p)) return true;
-			case 6:
-				if (assign.color.equals(c) == assign.cigar.equals(ci)) return true;
-			case 7:
-				if (EinsteinBackTrack.vars[houseNo].beverage.equals(b)) return true;
 			case 8:
 				if (EinsteinBackTrack.vars[houseNo].nationality.equals(n)) return true;
-			case 9:
-				for (int i=0; i<EinsteinBackTrack.vars.length-1; ++i) {
-					if ((EinsteinBackTrack.vars[i].cigar.equals(ci) && EinsteinBackTrack.vars[i+1].pet.equals(p))
-							|| (EinsteinBackTrack.vars[i].pet.equals(p) && EinsteinBackTrack.vars[i+1].cigar.equals(ci))) return true;
-				}
-			case 10:
-				if (assign.cigar.equals(ci) == assign.beverage.equals(b)) return true;
 			case 11:
 				if (assign.nationality.equals(n) && assign.cigar.equals(ci)) return true;
 			case 12:
@@ -203,6 +176,20 @@ public class EinsteinConstraint implements Constraint {
 					if ((EinsteinBackTrack.vars[i].nationality.equals(n) && EinsteinBackTrack.vars[i+1].color.equals(c))
 							|| (EinsteinBackTrack.vars[i].color.equals(c) && EinsteinBackTrack.vars[i+1].nationality.equals(n))) return true;
 				}
+		}
+		return false;
+	}
+
+	public boolean isSatisfied(HouseAssignment assign, Beverage beverage) {
+		switch (type) {
+			case 2:
+				if (assign.nationality.equals(n) == assign.beverage.equals(b)) return true;
+			case 4:
+				if (assign.color.equals(c) == assign.beverage.equals(b)) return true;
+			case 7:
+				if (EinsteinBackTrack.vars[houseNo].beverage.equals(b)) return true;
+			case 10:
+				if (assign.cigar.equals(ci) == assign.beverage.equals(b)) return true;
 			case 13:
 				for (int i=0; i<EinsteinBackTrack.vars.length-1; ++i) {
 					if ((EinsteinBackTrack.vars[i].cigar.equals(ci) && EinsteinBackTrack.vars[i+1].beverage.equals(b))
@@ -212,4 +199,64 @@ public class EinsteinConstraint implements Constraint {
 		return false;
 	}
 
+	public boolean isSatisfied(HouseAssignment assign, Color color) {
+		switch (type) {
+			case 0:
+				if (assign.nationality.equals(n) == assign.color.equals(c)) return true;
+			case 3:
+				for (int i=0; i<EinsteinBackTrack.vars.length-1; ++i) {
+					if (EinsteinBackTrack.vars[i].color.equals(c1)
+							&& !EinsteinBackTrack.vars[i].color.equals(c2)
+							&& EinsteinBackTrack.vars[i+1].color.equals(c2)
+							&& !EinsteinBackTrack.vars[i+1].color.equals(c1)) return true;
+				}
+			case 4:
+				if (assign.color.equals(c) == assign.beverage.equals(b)) return true;
+			case 6:
+				if (assign.color.equals(c) == assign.cigar.equals(ci)) return true;
+			case 12:
+				for (int i=0; i<EinsteinBackTrack.vars.length-1; ++i) {
+					if ((EinsteinBackTrack.vars[i].nationality.equals(n) && EinsteinBackTrack.vars[i+1].color.equals(c))
+							|| (EinsteinBackTrack.vars[i].color.equals(c) && EinsteinBackTrack.vars[i+1].nationality.equals(n))) return true;
+				}
+		}
+		return false;
+	}
+
+	public boolean isSatisfied(HouseAssignment assign, Cigar cigar) {
+		switch (type) {
+			case 5:
+				if (assign.cigar.equals(ci) == assign.pet.equals(p)) return true;
+			case 9:
+				for (int i=0; i<EinsteinBackTrack.vars.length-1; ++i) {
+					if ((EinsteinBackTrack.vars[i].cigar.equals(ci) && EinsteinBackTrack.vars[i+1].pet.equals(p))
+							|| (EinsteinBackTrack.vars[i].pet.equals(p) && EinsteinBackTrack.vars[i+1].cigar.equals(ci))) return true;
+				}
+			case 10:
+				if (assign.cigar.equals(ci) == assign.beverage.equals(b)) return true;
+			case 11:
+				if (assign.nationality.equals(n) && assign.cigar.equals(ci)) return true;
+			case 13:
+				for (int i=0; i<EinsteinBackTrack.vars.length-1; ++i) {
+					if ((EinsteinBackTrack.vars[i].cigar.equals(ci) && EinsteinBackTrack.vars[i+1].beverage.equals(b))
+							|| (EinsteinBackTrack.vars[i].beverage.equals(b) && EinsteinBackTrack.vars[i+1].cigar.equals(ci))) return true;
+				}
+		}
+		return false;
+	}
+
+	public boolean isSatisfied(HouseAssignment assign, Pet pet) {
+		switch (type) {
+			case 1:
+				if (assign.nationality.equals(n) == assign.pet.equals(p)) return true;
+			case 5:
+				if (assign.cigar.equals(ci) == assign.pet.equals(p)) return true;
+			case 9:
+				for (int i=0; i<EinsteinBackTrack.vars.length-1; ++i) {
+					if ((EinsteinBackTrack.vars[i].cigar.equals(ci) && EinsteinBackTrack.vars[i+1].pet.equals(p))
+							|| (EinsteinBackTrack.vars[i].pet.equals(p) && EinsteinBackTrack.vars[i+1].cigar.equals(ci))) return true;
+				}
+		}
+		return false;
+	}
 }
